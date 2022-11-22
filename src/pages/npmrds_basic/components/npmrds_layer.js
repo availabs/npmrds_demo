@@ -9,7 +9,7 @@ import {
   ConflationCaseLayers,
 } from "components/map_data/conflation_sources";
 
-import TmcInfoComp from './components/tmc_info_comp'
+import TmcInfoComp from './tmc_info_comp'
 
 
 
@@ -81,7 +81,7 @@ class NpmrdsLayer extends LayerContainer {
       Component: ({layer}) => {
         return  (
             <div className='overflow-y-auto w-[400px]  absolute right-2 top-2 bottom-32 overflow-y-auto overflow-x-hidden'>
-              <div className='bg-white p-2 w-full'>
+              <div className='bg-white p-2 w-full pointer-events-auto'>
               {layer.state.tmcs.length > 0 ? 
                 layer.state.tmcs.map(tmc => 
                   <TmcInfoComp key={tmc} tmc={tmc} year={layer.state.year}/>

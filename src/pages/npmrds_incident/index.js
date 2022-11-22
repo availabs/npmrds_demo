@@ -1,20 +1,24 @@
 
 import { AvlMap } from "modules/avl-map/src";
 import config from "config.json"
-import NpmrdsLayer from './components/npmrds_layer'
+import NpmrdsLayer from './components/incident_analysis_layer'
+import { useFalcor } from 'modules/avl-falcor'
 const MAPBOX_TOKEN = config.MAPBOX_TOKEN;
 
 function Basic() {
+  const { falcor } = useFalcor()
 
   return (
     <div className='w-full h-full'>
       <AvlMap
         accessToken={MAPBOX_TOKEN}
+        falcor={falcor}
         mapOptions={{
-          zoom: 6.5,
+          zoom: 9.5,
         center: [
-            -75.750732421875,
-           42.89206418807337
+          -78.70136375249648,
+          42.9060269562662
+          
         ],
         maplibreLogo: false,
 
@@ -38,8 +42,8 @@ function Basic() {
 }
 
 const BasicConfig = {
-  path: '/',
-  name: 'Basic Map',
+  path: '/incident_map',
+  name: 'Incident Map',
   mainNav: true,
   element: <Basic />
 };

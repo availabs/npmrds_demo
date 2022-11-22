@@ -12,8 +12,18 @@ import {
 } from "modules/avl-falcor"
 
 import routes from  "./routes";
+import Layout from './layout'
+import ErrorPage from './pages/error_page'
 
-const router = createBrowserRouter(routes);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    errorElement: <ErrorPage />,
+    children: routes
+    
+  }
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -29,3 +39,4 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 // reportWebVitals();
+

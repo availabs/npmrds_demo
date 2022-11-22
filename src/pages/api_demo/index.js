@@ -1,14 +1,18 @@
+import React from 'react'
+
 
 function App() {
   return (
     <div>
-      Incident Demo
+     NPMRDS Api
     </div>
   );
 }
 
 const PageConfig =  {
-  path: '/incident',
+  path: '/api_docs',
+  name: 'API Docs',
+  mainNav: true,
   element: <App />
 };
 

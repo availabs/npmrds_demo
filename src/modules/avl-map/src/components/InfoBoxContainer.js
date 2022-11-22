@@ -35,8 +35,8 @@ const InfoBoxContainer = ({
   return (
     <div
       className={`
-        absolute right-0 top-0 bottom-0
         flex flex-col items-end z-30
+        pointer-events-none
       `}
       style={{ padding: `${padding}px` }}
     >
