@@ -22,12 +22,20 @@ const TmcInfoComp = ({tmc,year}) => {
  
 	const requestKey = React.useMemo(() => [
 		[tmc],
-	    +`${year}0101`,
-	    +`${year}1231`,
-	    0,
-	    288,
-	    Weekdays.slice(1, 6),
-	    "5-minutes",
+	    +`${year}0101`, // start date
+	    +`${year}0201`, // end date
+	    0, //start epoch
+	    288, // end epoch
+	    Weekdays, //day filter
+	    "15-minutes", // resolution 
+	    /* --
+	    	'5-minutes',
+	    	'15-minutes',
+	    	'hour',
+	    	'date', 
+	    	'month',
+	    	'year'
+	    */
 	    "travel_time_all",
 	    "travelTime",
 	    encodeURI(JSON.stringify({})),
@@ -52,6 +60,7 @@ const TmcInfoComp = ({tmc,year}) => {
       		["routes", "data", [requestKey]]
     	);
 	}, [tmc, year, requestKey,falcor])
+	// https://graph.availabs.org/graph?paths= + urlencode(JSON.stringify(["routes", "data", [requestKey]])
 
 
 	const tmcMetadata = React.useMemo(() => {

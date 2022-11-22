@@ -10,6 +10,8 @@ import {
   ConflationCaseLayers,
 } from "components/map_data/conflation_sources";
 
+import IncidentAnalysis from './incident_analysis_comp'
+
 
 const colorsForTypes = {
   "Crash":"#fde72f",
@@ -50,7 +52,9 @@ class NpmrdsLayer extends LayerContainer {
     tmcs: [],
     year: 2022,
     incident_date: '2022-09-22',
-    incident_geom: 'REGION-5'
+    incident_geom: 'REGION-5',
+    activeIncident: null,
+    incidentTmc: null
   }
   sources = [
     ...ConflationSources,
@@ -117,9 +121,13 @@ class NpmrdsLayer extends LayerContainer {
         return  (
             <div className='overflow-y-auto w-[400px] absolute right-2 top-2 bottom-32 overflow-y-auto overflow-x-hidden'>
               <div className='bg-white p-2 w-full'>
-               
-                "Click Incident to get Info"
-              
+                { layer.state.activeIncident ? 
+                  <IncidentAnalysis 
+                    event_id={layer.state.activeIncident}
+                    layer={layer}
+                  /> :
+                  "Click Incident to get Info"
+                }
               </div>
             </div>
         )
@@ -144,15 +152,22 @@ class NpmrdsLayer extends LayerContainer {
 
   onClick = {
     layers: ['events-points'],
-    callback: function(layerId, features) {
-      // const tmc = get(features,'[0].properties.tmc',null)
-      // if(tmc){
-      //   if(!this.state.tmcs.includes(tmc)){
-      //     this.updateState({...this.state, tmcs: [...this.state.tmcs, tmc]})
-      //   } else {
-      //     this.updateState({...this.state, tmcs: this.state.tmcs.filter(t => t !== tmc)})
-      //   }
-      // }
+    callback: function(layerId, features, lngLat, point) {
+      const eventId = get(features,'[0].properties.id',null)
+      console.log('onclick', features, eventId,)
+      if(eventId){
+        const bbox = [
+        [point.x - 1, point.y - 1],
+        [point.x + 1, point.y + 1]
+        ];
+        // Find features intersecting the bounding box.
+        const selectedFeatures = this.mapboxMap.queryRenderedFeatures(bbox, {
+          layers: ConflationLayers.map((l) => l.id)
+        });
+        console.log('selectedFeatures', selectedFeatures)
+
+        this.updateState({...this.state, activeIncident: eventId, incidentTmc: get(selectedFeatures, '[0].properties.tmc', null)})
+      }
     }
   }
 
@@ -160,8 +175,7 @@ class NpmrdsLayer extends LayerContainer {
     layers: ["events-points"],// , ...ConflationLayers.map((l) => l.id)],
     pinnable: false,
     callback: function(layerId, features) {
-      console.log('hover', features)
-      return features.map(f => f.properties);
+      return [features[0].properties];
     },
     HoverComp
   };
@@ -214,7 +228,6 @@ class NpmrdsLayer extends LayerContainer {
     // create geojson object with events as features
     // and update the source
     // ---
-    console.log('events',events)
     const eventsCollection = {
       type: "FeatureCollection",
       features: events

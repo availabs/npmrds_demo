@@ -1,10 +1,12 @@
 import React from 'react'
+import get from 'lodash.get'
 
 const HoverComp = ({ data, layer }) => {
   return (
     <div className='bg-white p-4 max-w-xs grid grid-cols-1 gap-1'>
 
       { data
+          .filter((d,i) => d.id != get(data, `[${i+1}].id`, false))
           .map(d =>
             <div key={ d.id }>
               <div className='font-bold border-b border-gray-100 '>
